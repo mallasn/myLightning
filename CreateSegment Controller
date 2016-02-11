@@ -1,0 +1,130 @@
+({
+	doInit : function(cmp) {
+
+	},
+
+    setClientID: function(cmp,event){
+        cmp.set("v.ClientId", event.getParam("SelectedClientId"));
+		cmp.set("v.ClientName", event.getParam("SelectedClientName"));        
+    },
+    
+    previous : function(cmp){
+        cmp.set("v.btnSubmit","false");
+        
+		//Setting event parameters
+		var appEvent = $A.get("e.c:CreateSegPrevious");
+    	appEvent.setParams({"createPrevious" : 'home'});
+        appEvent.fire();
+        
+		cmp.set("v.noOption", 'False');
+		cmp.set("v.noOrg", 'False');        
+        
+    },
+    
+	cancel : function(cmp){
+        var url = window.location.href.split('.com')[0]+'.com';
+        window.location.href = url + '/003?fcf=00B30000007H7yV';
+	},    
+
+    submit : function(cmp){
+		var txtValue = document.getElementById("txtValue").value;
+		cmp.set("v.btnSubmit","true");
+        var aaa = cmp.get("v.ClientId");
+        console.log('clientid:' + cmp.get("v.ClientId"));
+		if(aaa === 'false'){
+            cmp.set("v.noOrg","True");
+            //alert('Please choose Organization Name to continue');
+            //return;    	
+		}
+        else{
+            cmp.set("v.noOrg","False");
+            if(typeof cmp.get("v.ListId") === 'noValue' || typeof cmp.get("v.secondOptName") === 'false' || txtValue ==='' ){
+                cmp.set("v.noOption","True");
+                //alert('Please choose drop down options to get contacts');
+                //return;
+            }
+            else{
+                //get contacts depends on the selection criteria
+                var action = cmp.get("c.GetContacts");
+                var field;
+                var cid = cmp.get("v.ClientId");
+                if(cmp.get("v.selectedValue") == 'int'){
+                    field = 'InterestsSelected__c';
+                }
+                else if(cmp.get("v.selectedValue") == 'country'){
+                    field = 'Country__c';            
+                }
+                else if(cmp.get("v.selectedValue") == 'name'){
+                    field = 'Name';
+                }
+                else if(cmp.get("v.selectedValue") == 'email'){
+                    field = 'Email';            
+                }        
+        console.log('param values: ' + cmp.get("v.ClientName"));
+                action.setParams({
+                    "txtValue": txtValue,
+                    "fieldName":field,
+                    "secondOption":cmp.get("v.secondOptName"),
+                    "clientName":cmp.get("v.ClientName"),,
+                });
+                
+                action.setCallback(this, function(response){
+                    cmp.set("v.Contacts", response.getReturnValue()); 
+                });
+                $A.enqueueAction(action);        
+        
+                //Setting event parameters
+                var appEvent = $A.get("e.c:ContactQuery");
+        
+                appEvent.setParams({"fieldName" : field});
+                appEvent.setParams({"secondOption" : cmp.get("v.secondOptName")});
+                appEvent.setParams({"txtValue" : txtValue});        
+                appEvent.fire();        
+            }
+        }
+    },
+
+	onChange: function(cmp) {
+//		var dynamicCmp = cmp.find("secondOption");
+//		cmp.set("v.secondOptName", dynamicCmp.get("v.value"));
+		var dynamicCmp = document.getElementById("secondOption");
+        var selSevValue = dynamicCmp.options[dynamicCmp.selectedIndex].value;
+//console.log('second option--'+ dynamicCmp + selSevValue);	
+        cmp.set("v.secondOptName", selSevValue);
+	},
+
+ 
+    orClicked : function(cmp){
+		var appEvent = $A.get("e.c:orButton");
+    	appEvent.setParams({"orOption" : 'orClicked'});
+        appEvent.fire();
+    },
+    
+ 	change : function(cmp){
+		var selectOpt = document.getElementById("segList");
+
+		var selectedVal = selectOpt.options[selectOpt.selectedIndex].value;
+		cmp.set("v.selectedValue", selectedVal);
+/*		
+        if(selectedVal === 'loc'){
+			var locs = [
+				{ class: "optionClass", label: "is known", value: "is known" },
+				{ class: "optionClass", label: "is not known", value: "is not known" },
+                { class: "optionClass", label: "is near", value: "is near" },
+				{ class: "optionClass", label: "is in", value: "is in" },
+				{ class: "optionClass", label: "is not in", value: "is not in" } 
+			];
+        }
+		else if(selectedVal === 'name' || selectedVal === 'country' || selectedVal === 'email' || selectedVal === 'int'){
+			var locs = [
+            	{ class: "optionClass", label: "equals", value: "equals" },
+				{ class: "optionClass", label: "not equal to", value: "not equal to" },                
+            	{ class: "optionClass", label: "starts with", value: "starts with" },
+            	{ class: "optionClass", label: "contains", value: "contains" },
+           		{ class: "optionClass", label: "does not contain", value: "does not contain" },
+			];
+        }        
+       cmp.find("secondOption").set("v.options", locs);        
+*/	
+	},
+})

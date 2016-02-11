@@ -1,0 +1,76 @@
+<aura:component extensible="true" controller="CreateSegmentController">
+	<link href='/resource/SLDS0101/assets/styles/salesforce-lightning-design-system-ltng.css' rel="stylesheet" />
+       
+	<aura:attribute name="ClientList" type="wbsendit__Client__c[]"/>
+    <aura:attribute name="ClientId" type="String" default="false"/>    
+    <aura:attribute name="ListId" type="String" default="false"/>
+    <aura:attribute name="noOption" type="String" default="False"/>    
+
+	<aura:handler event="c:SelectedClientId" action="{!c.setClientID}"/>
+    
+    <div class="slds">
+        <div class="slds-grid">            
+            <div class="slds-col"></div>
+                <div class="slds-col">
+                    <h3 class="slds-section-title">Available Segments</h3>
+                </div>
+            <div class="slds-col"></div>
+        </div> 
+
+        
+	<div style="padding-bottom: 20px"/>
+	 <div class="slds-grid">
+        <div class="slds-col"></div>
+        <div class="slds-col">
+         <div class="slds-p-vertical--medium">
+			<aura:renderIf isTrue="{!v.noOption == 'True'}">
+				<div class="slds-box slds-theme--error slds-theme--inverse-text">
+					<p>Please choose Segment Name to continue</p>
+				</div>
+			</aura:renderIf> 
+            <table class="slds-table slds-table--bordered">
+            <thead>            
+                <tr class="slds-text-heading--label">
+                <td scope="col">
+                     <span>Select</span>
+                </td>
+                <td scope="col"> 
+                    <span>Segment Name</span>
+                </td>
+            </tr>
+                </thead>
+        <aura:iteration var="ClientListInstance" items="{!v.ClientList}">
+                     
+                <tr>
+                    <td>
+                        <input type="radio" name="ListId" value="{!ClientListInstance.wbsendit__Client_Id__c}" onclick = "{!c.selection}"/>             
+                    </td>
+                    <td>
+                        <ui:outputText value="{!ClientListInstance.wbsendit__Client_Name__c}"/>
+                    </td>
+                </tr>
+            
+        </aura:iteration>
+             </table>
+    </div>
+         </div>
+         <div class="slds-col"></div>
+        </div> <!-- slds-grid -->
+    <div style="padding-bottom: 20px"/>
+        <div class="slds-grid">
+             <div class="slds-col"></div>
+    <div class="slds-col slds-no-flex slds-align-right">
+		<c:button svgXlinkHref="/resource/SLDS0101/assets/icons/utility-sprite/svg/symbols.svg#back" 
+                         svgClass="slds-button__icon slds-button__icon--left" 
+                  label="Previous" class="slds-button slds-button--neutral" onclick="{!c.previous}" ></c:button>
+        <c:button svgXlinkHref="/resource/SLDS0101/assets/icons/utility-sprite/svg/symbols.svg#delete" 
+                         svgClass="slds-button__icon slds-button__icon--right"  
+                  label="Delete" class="slds-button slds-button--neutral" onclick="{!c.deleteList}" ></c:button>
+		<c:buttonRight svgXlinkHref="/resource/SLDS0101/assets/icons/utility-sprite/svg/symbols.svg#forward" 
+                         svgClass="slds-button__icon slds-button__icon--right" 
+                  label="Cancel" class="slds-button slds-button--neutral" onclick="{!c.cancel}" ></c:buttonRight>        
+    </div>
+        <div class="slds-col"></div>
+        </div> <!-- slds-grid -->
+    </div>
+</aura:component>

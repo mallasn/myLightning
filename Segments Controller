@@ -1,0 +1,54 @@
+({
+	doInit : function(cmp,event) {
+    //    if(event.getParam("createPrevious") == 'createPrevious'){
+	//		cmp.set("v.optToContinue", 'home');		            
+    //    }
+	},
+	cancel : function(cmp){
+        var url = window.location.href.split('.com')[0]+'.com';
+        window.location.href = url + '/003?fcf=00B30000007H7yV';
+	},
+ 	selection : function(cmp){
+    	var option = event.target.value;
+    
+    	cmp.set("v.selectedOption", option);
+    
+/*		var appEvent = $A.get("e.c:SelectedOption");
+    	appEvent.setParams({
+    		"optionName" : selectedOption,
+		});
+        appEvent.fire();*/
+	
+
+	},
+
+    createPrevious: function(cmp){
+        cmp.set("v.optToContinue", "home");
+        cmp.set("v.selectedOption", "null");
+        cmp.set("v.noOption", 'False');
+    },
+    
+	previous : function(cmp){
+        var url = window.location.href.split('.com')[0]+'.com';
+        window.location.href = url + '/003?fcf=00B30000007H7yV';
+	},    
+    
+    continue : function(cmp){
+    	if(cmp.get("v.selectedOption") === 'null'){	
+    	//if(typeof cmp.get("v.optToContinue") === 'home'){	
+		    cmp.set("v.noOption","True"); 	
+		}    
+ 		else{
+ 			cmp.set("v.optToContinue",cmp.get("v.selectedOption"));    
+		}
+	},
+
+ 	newRow : function(cmp){
+		var div = document.createElement("div");
+
+//		div.className = 'row';
+		div.innerHTML = '<c:CreateSegment />';
+		document.getElementById('newRow').appendChild(div);
+	} 
+
+})

@@ -1,0 +1,64 @@
+<aura:component extensible="true" controller="CreateSegmentController">
+    <link href='/resource/SLDS0101/assets/styles/salesforce-lightning-design-system-ltng.css' rel="stylesheet" />
+	<aura:attribute name="ClientList" type="wbsendit__Client__c[]"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:registerEvent name="selListId" type="c:SelectedClientId" />
+
+<div class="slds"> 
+    <div class="slds-page-header" role="banner">
+            <div class="slds-media">
+                <div class="slds-media__body">
+                    <div class="slds-text-heading--large" align="center">
+                        <p class="slds-text-heading--label">Segments Management</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="padding-bottom: 50px"/>
+    
+    <div class="slds-grid">
+        <div class="slds-col"></div>
+            <div class="slds-col">
+                <h3 class="slds-section-title">Available Oragnizations</h3>
+            </div>
+        <div class="slds-col"></div>
+    </div>
+    
+    <div class="slds-grid">
+        <div class="slds-col"></div>
+        <div class="slds-col">
+            <div class="slds-p-vertical--medium">
+            <table class="slds-table slds-table--bordered">
+            <thead>
+                <tr class="slds-text-heading--label">
+                    <td scope="col">
+                         <span>Select</span>
+                    </td>
+                    <td scope="col"> 
+                        <span>Organization Name</span>
+                    </td>
+                </tr>
+             </thead>
+                <aura:iteration var="ClientListInstance" items="{!v.ClientList}">
+                    <tr>
+                        <td>
+                            <input type="radio" name="ClientId" value="{!ClientListInstance.wbsendit__Client_Id__c}" onclick = "{!c.selection}"/>             
+                        </td>
+                        <td>
+                            <ui:outputText aura:id="clientName" value="{!ClientListInstance.wbsendit__Client_Name__c}"/>
+                        </td>
+                    </tr>
+                    
+                </aura:iteration>
+                </table>
+    		</div>
+        </div> <!-- slds-col -->
+        <div class="slds-col"></div>
+        </div><!-- slds-grid -->
+    
+        
+    </div> <!-- slds -->
+    <div style="padding-bottom: 50px"/>
+    
+</aura:component>

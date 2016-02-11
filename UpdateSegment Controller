@@ -1,0 +1,43 @@
+({
+
+    setClientID: function(cmp,event){
+        cmp.set("v.ClientId", event.getParam("SelectedClientId"));
+        var action = cmp.get("c.GetList")
+
+        action.setParams({
+            "clientId": cmp.get("v.ClientId")
+        });
+        
+        action.setCallback(this, function(response){
+            cmp.set("v.ClientList", response.getReturnValue());
+        });
+    	$A.enqueueAction(action);        
+        
+    },
+    
+    selection: function(cmp){
+		cmp.set("v.ListId", event.target.value)  
+        
+//if works remove GetAutoRules
+        var action = cmp.get("c.GetAutoRules")
+
+        action.setParams({
+            "listId": cmp.get("v.ListId")
+        });
+
+        action.setCallback(this, function(response){
+            cmp.set("v.AutoRules", response.getReturnValue());
+        });
+    	$A.enqueueAction(action);        
+        
+    },
+
+	cancel : function(cmp){
+        window.location.href = 'https://iipstate--crmdemo.cs32.my.salesforce.com/003?fcf=00B30000007H7yV';
+	},
+    
+    update: function(cmp) {
+        
+	}
+    
+})

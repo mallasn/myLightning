@@ -1,0 +1,7 @@
+({
+	doInit : function(cmp) {
+
+		var url = window.location.href.split('.com')[0]+'.com';
+		window.location.href = url + '/setup/dataImporter.app';
+	}
+})

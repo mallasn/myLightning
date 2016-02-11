@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="For Previos button">
+    <aura:attribute name="createPrevious" type="String"/>
+</aura:event>

@@ -1,0 +1,121 @@
+<aura:component extensible="true" controller="CreateSegmentController" implements="force:appHostable">
+	<link href='/resource/SLDS0101/assets/styles/salesforce-lightning-design-system-ltng.css' rel="stylesheet" />
+    
+	<aura:attribute name="selectedValue" type="String" default="noValue"/>
+    <aura:attribute name="Contacts" type="Contact[]"/>
+    <aura:attribute name="btnSubmit" type="String" default="false"/>
+    <aura:attribute name="numTotalItems" type="Integer"/>
+    <aura:attribute name="pageSize" type="Integer" default="5"/>
+    <aura:attribute name="secondOptName" type="String" default="false"/>
+    <aura:attribute name="ClientId" type="String" default="false"/>    
+    <aura:attribute name="ClientName" type="String" default="false"/> 
+    <aura:attribute name="noOption" type="String" default="False"/>        
+    <aura:attribute name="noOrg" type="String" default="False"/>        
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:handler event="c:SelectedClientId" action="{!c.setClientID}"/> 
+
+    <aura:registerEvent name="orButton" type="c:orButton" />
+    <aura:registerEvent name="ContactQuery" type="c:ContactQuery" />    
+    <aura:registerEvent name="CreateSegPrevious" type="c:CreateSegPrevious" />
+    
+    <div class="slds">
+	<div style="padding-bottom: 50px"/>
+	<div class="slds-text-body--regular" align="center"> Use the dropdown to filter Contacts and create Segments: </div>
+
+	<div class="slds-grid">
+		<div class="slds-col"></div>
+			<div class="slds-col">
+				<div class="slds-p-vertical--medium">
+					<aura:renderIf isTrue="{!v.noOrg == 'True'}">
+                    	<div class="slds-box slds-theme--error slds-theme--inverse-text">
+                        	<p>Please choose Organization Name to continue</p>
+                    	</div>
+                	</aura:renderIf> 
+                    <aura:renderIf isTrue="{!v.noOption == 'True'}">
+                    	<div class="slds-box slds-theme--error slds-theme--inverse-text">
+                        	<p>Please choose drop down options to get contacts</p>
+                    	</div>
+                	</aura:renderIf> 
+        		</div>
+             </div>
+			<div class="slds-col"></div>
+	</div> <!-- slds-grid -->
+        
+        
+	<div style="width:100%;" align="center">
+		<table style="width: 32%;">
+			<tr>
+				<td>
+					<select id = "segList" onchange= "{!c.change}" name = "segList">            
+						<option disabled="disabled" >&nbsp;&nbsp;<b>Subscriber details</b></option>
+						<option value = "name" >&nbsp;&nbsp;<b>Name</b></option>
+						<option value = "email" >&nbsp;&nbsp;<b>Email</b></option>
+						<option value = "country" >&nbsp;&nbsp;<b>Country</b></option>
+						<option value = "int" >&nbsp;&nbsp;<b>Interests</b></option>                        
+						<option selected="selected" disabled="disabled">Define rule based on ...</option>                        
+					</select>
+				</td>
+				<td>
+					<select id = "secondOption" onchange= "{!c.onChange}" name = "secondOption">            
+						<option selected="selected" disabled="disabled" >&nbsp;&nbsp;<b>--None--</b></option>
+						<option value = "equals" >&nbsp;&nbsp;<b>equals</b></option>
+						<option value = "not equal to" >&nbsp;&nbsp;<b>not equal to</b></option>
+						<option value = "starts with" >&nbsp;&nbsp;<b>starts with</b></option>
+						<option value = "contains" >&nbsp;&nbsp;<b>contains</b></option>
+						<option value = "does not contain" >&nbsp;&nbsp;<b>does not contain</b></option>                            
+					</select>                        
+				</td>
+				<td>
+					<input type="text" name="txtValue" id="txtValue"/>
+				</td>
+				<td>
+                    <div class="slds-grid">
+                        <div class="slds-col"></div>
+                       
+                    </div>    
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div style="padding-bottom: 20px"/>
+
+		<div class="slds-grid">
+			<div class="slds-col"></div>
+			<div class="slds-col slds-no-flex slds-align-right">
+                <div class="slds-button-group" role="group">
+                   
+                    <c:button svgXlinkHref="/resource/SLDS0101/assets/icons/utility-sprite/svg/symbols.svg#back" 
+                        svgClass="slds-button__icon slds-button__icon--left" 
+                        class="slds-button slds-button--neutral" 
+                        onclick="{!c.previous}" label="Previous" />
+
+							<c:button svgXlinkHref="/resource/SLDS0101/assets/icons/action-sprite/svg/symbols.svg#update_status" 
+								svgClass="slds-button__icon slds-button__icon--left" 
+								class="slds-button-space-left slds-button--neutral" 
+								onclick="{!c.submit}" label="Submit" />
+                         
+                          <c:buttonRight svgXlinkHref="/resource/SLDS0101/assets/icons/utility-sprite/svg/symbols.svg#forward" 
+                        svgClass="slds-button__icon slds-button__icon--left" 
+                        class="slds-button slds-button--neutral" 
+                        onclick="{!c.cancel}" label="Cancel" />
+                    	</div>
+                    
+                </div>
+            			<div class="slds-col"></div>
+			</div>
+
+
+
+    <div style="padding-bottom: 30px"/>
+	<aura:renderIf isTrue="{!v.btnSubmit == 'true'}">
+        <aura:renderIf isTrue="{!v.Contacts.length > 0}">
+    			<c:ContactList ContactList="{!v.Contacts}" />
+        	<aura:set attribute="else">
+    			<h3><b>No Contact Matches Found, Change query and Submit</b></h3>
+        	</aura:set>
+    	</aura:renderIf>
+    </aura:renderIf>    
+</div>
+</aura:component>

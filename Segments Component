@@ -1,0 +1,91 @@
+<aura:component implements="force:appHostable">
+    <link href='/resource/SLDS092/assets/styles/salesforce-lightning-design-system-ltng.css' rel="stylesheet" />
+    
+    <aura:attribute name="selectedOption" type="String" default="null"/>
+    <aura:attribute name="optToContinue" type="String" default="home"/>
+    <aura:attribute name="noOption" type="String" default="False"/>
+
+    <aura:registerEvent name="AlertMsgEvent" type="c:AlertMsgEvent" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+    <aura:handler event="c:orButton" action="{!c.newRow}"/>
+    <aura:handler event="c:CreateSegPrevious" action="{!c.createPrevious}"/>    
+    
+    <div class="slds">
+    <aura:renderIf isTrue="{!v.optToContinue == 'home'}">
+        <div class="slds-page-header" role="banner">
+            <div class="slds-media">
+                <div class="slds-media__body">
+                    <div class="slds-text-heading--large" align="center">
+                        <p class="slds-text-heading--label">Segments Management</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid">
+
+            <div class="slds-col"></div>
+            <div class="slds-col">
+		<div class="slds-p-vertical--medium">
+            <aura:renderIf isTrue="{!v.noOption == 'True'}">
+                <div class="slds-box slds-theme--error slds-theme--inverse-text">
+                    <p>Please choose an Option to continue</p>
+				</div>
+            </aura:renderIf>
+            
+            <table class="slds-table slds-table--bordered">
+                <thead>
+                     <tr class="site-text-heading--label">
+                    <th scope="col">   
+                        <b>SELECT</b>
+                    </th>
+                    <th scope="col">
+                        <b>OPTION</b>
+                    </th>
+                </tr> 
+                </thead>
+               
+                <tr><td><input type="radio" name="option" value="create" onclick = "{!c.selection}"/>
+                    </td>
+                    <td>Create a Segment</td>
+                </tr>
+                <tr><td><input type="radio" name="option" value="delete" onclick = "{!c.selection}"/>
+                    </td><td>Delete a Segment</td>
+                </tr>
+            </table>        
+        </div> <!-- slds-p-vertical__medium-->
+        </div> <!-- slds-cols-->
+        
+        <div class="slds-col"></div>
+        </div> <!-- slds-grid -->
+        <div class="slds-grid">
+             <div class="slds-col"></div>
+         <div class="slds-col slds-no-flex slds-align-right">
+             <div class="slds-button-group" role="group">
+                 <c:button svgXlinkHref="/resource/SLDS092/assets/icons/utility-sprite/svg/symbols.svg#back" 
+                         svgClass="slds-button__icon slds-button__icon--left" 
+                         class="slds-button slds-button--neutral" 
+                           onclick="{!c.cancel}" label="Cancel" />
+                 <c:buttonRight svgXlinkHref="/resource/SLDS092/assets/icons/utility-sprite/svg/symbols.svg#forward" 
+                         svgClass="slds-button__icon slds-button__icon--right" 
+                         class="slds-button-space-left slds-button--neutral" 
+                           onclick="{!c.continue}" label="Continue" />
+             </div>
+          </div>
+             <div class="slds-col"></div>
+        </div> <!-- slds-grid -->
+    </aura:renderIf>
+    </div>
+	<div style="padding-bottom: 20px"/>
+
+    
+    <aura:renderIf isTrue="{!v.optToContinue == 'delete'}">
+        <c:CampaignMonitorClients />
+        <c:ClientLists />
+    </aura:renderIf>  
+    <aura:renderIf isTrue="{!v.optToContinue == 'create'}">
+        <c:CampaignMonitorClients />
+        <c:CreateSegment />
+    </aura:renderIf>
+
+</aura:component>

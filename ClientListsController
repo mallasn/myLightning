@@ -1,0 +1,59 @@
+({
+
+    setClientID: function(cmp,event){
+        cmp.set("v.ClientId", event.getParam("SelectedClientId"));
+
+        var action = cmp.get("c.GetList")
+
+   	    action.setParams({
+       	    "clientId": cmp.get("v.ClientId")
+       	});
+        
+       	action.setCallback(this, function(response){
+           	cmp.set("v.ClientList", response.getReturnValue());
+       	});
+   		$A.enqueueAction(action);        
+    },
+    
+    selection: function(cmp){
+		cmp.set("v.ListId", event.target.value)        
+    },
+
+	cancel : function(cmp){
+        var url = window.location.href.split('.com')[0]+'.com';
+        window.location.href = url + '/003?fcf=00B30000007H7yV';
+	},
+
+    previous : function(cmp){
+		//Setting event parameters
+		var appEvent = $A.get("e.c:CreateSegPrevious");
+    	appEvent.setParams({"createPrevious" : 'home'});
+        appEvent.fire();
+        
+		var appEvent = $A.get("e.c:AlertMsgEvent");
+    	appEvent.setParams({"alertMsg" : 'False'});
+        appEvent.fire();
+        
+		cmp.set("v.noOption", 'False');
+    },
+    
+    deleteList: function(cmp) {
+		if(cmp.get("v.ListId") === 'false'){
+            cmp.set("v.noOption","True");
+            //alert('Please choose Segment Name to continue');
+            //return;    	
+		}    
+ 		else{        
+            var action = cmp.get("c.DeleteList")
+    
+            action.setParams({
+                "listId": cmp.get("v.ListId")
+            });
+            
+            $A.enqueueAction(action);
+            var url = window.location.href.split('.com')[0]+'.com';
+            window.location.href = url + '/003?fcf=00B30000007H7yV';
+        }        
+	}
+    
+})

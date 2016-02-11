@@ -1,0 +1,29 @@
+({
+	doInit : function(cmp) {
+
+        //get Client list
+        var action = cmp.get("c.GetClientList")
+        
+        action.setCallback(this, function(response){
+            cmp.set("v.ClientList", response.getReturnValue());
+        });
+    	$A.enqueueAction(action);
+	},
+    
+ 	selection : function(cmp){
+        var option = event.target.value;
+		var clientName;        
+        for (var i=0; i< cmp.get("v.ClientList").length; i++) {
+    		var record = cmp.get("v.ClientList")[i];
+            if(option === record.wbsendit__Client_Id__c){
+                clientName = record.wbsendit__Client_Name__c;               
+            }
+  		}
+
+		var appEvent = $A.get("e.c:SelectedClientId");
+        appEvent.setParams({"SelectedClientId" : option});
+        appEvent.setParams({"SelectedClientName" : clientName});
+        appEvent.fire();        
+	},
+    
+})

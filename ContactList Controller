@@ -1,0 +1,76 @@
+({
+	create: function(cmp) {
+		var listName = document.getElementById("listName").value;
+        if(listName === ''){
+            alert('Please select Segment Name to continue');
+        }
+        else if(cmp.get("v.checkedContacts").toString().length === 0 && cmp.get("v.allContacts") === 'none'){
+            alert('Please Select All or Select Contacts to continue');
+        }
+        else{            
+            var action = cmp.get("c.CreateList");
+
+            action.setParams({
+                "checkedContacts" : $A.util.json.encode(cmp.get("v.checkedContacts")),
+                "listName": listName,
+                "clientId": cmp.get("v.ClientId"),
+                "fieldName": cmp.get("v.fieldName"),
+                "secondOption": cmp.get("v.secondOption"),
+                "txtValue": cmp.get("v.txtValue"),
+                "selectAll": cmp.get("v.allContacts")
+            });
+            
+            $A.enqueueAction(action);
+            var url = window.location.href.split('.com')[0]+'.com';
+            window.location.href = url + '/003?fcf=00B30000007H7yV';
+        }    
+	},
+    
+    setClientID: function(cmp,event){
+        cmp.set("v.ClientId", event.getParam("SelectedClientId"));
+    },
+
+    SetListValues: function(cmp,event){
+        cmp.set("v.fieldName", event.getParam("fieldName"));
+        cmp.set("v.secondOption", event.getParam("secondOption"));
+        cmp.set("v.txtValue", event.getParam("txtValue"));        
+    },    
+
+    
+//    selection: function(cmp){
+//        alert(event.target.value);
+//    },
+
+    allContacts: function(cmp,event){
+        var x = document.getElementById("allContacts");
+        if(x.checked === true){
+            cmp.set("v.allContacts",true);
+        }
+        else{
+            cmp.set("v.allContacts",false);            
+        }
+	//console.log(cmp.get("v.allContacts"));
+    },
+
+	cancel : function(cmp){
+        var url = window.location.href.split('.com')[0]+'.com';
+        window.location.href = url + '/003?fcf=00B30000007H7yV';
+	},
+    
+	updateCheckboxes : function(cmp, event) {
+		var id = event.source.get("v.text");
+        if (event.source.get("v.value")) {
+		// Checkbox is checked - add id to checkedContacts
+			if (cmp.get("v.checkedContacts").indexOf(id) < 0) {
+				cmp.get("v.checkedContacts").push(id);
+			}
+		} else {
+        // Checkbox is unchecked - remove id from checkedContacts
+			var index = cmp.get("v.checkedContacts").indexOf(id);
+			if (index > -1) {
+				cmp.get("v.checkedContacts").splice(index, 1);
+			}
+		}
+    },
+    
+})

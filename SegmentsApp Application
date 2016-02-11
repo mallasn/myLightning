@@ -1,0 +1,23 @@
+<aura:application access="GLOBAL">
+
+
+    <link href='/resource/SLDS092/assets/styles/salesforce-lightning-design-system-vf.css' rel="stylesheet" />
+    
+    <title>Process Segments in Campaign Monitor</title>
+	<div class="slds">
+        <div style="float:left;padding-left: 30px;padding-top: 10px;"> 
+            <img src="/resource/IIPLogo" width="600" height="125"/>
+            <div class="slds-text-body--regular">Target sub-groups of subscribers</div>
+
+			<div style="padding-bottom: 100px"/>
+        </div>	
+
+       
+        <br/>
+        <br/><br/>
+        <div>  	
+            <c:Segments />
+        </div>     
+        
+	</div>
+</aura:application>
